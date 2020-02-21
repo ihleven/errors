@@ -69,8 +69,6 @@ func (f Frame) Format(s fmt.State, verb rune) {
 			io.WriteString(s, f.name())
 			io.WriteString(s, "\n\t")
 			io.WriteString(s, f.file())
-			// fmt.Fprintf(s, "%s\n   --- at %v:%v ---", f.name(), f.file(), f.line())
-
 		default:
 			io.WriteString(s, path.Base(f.file()))
 		}
@@ -146,6 +144,12 @@ func (s *stack) Format(st fmt.State, verb rune) {
 	case 'v':
 		switch {
 		case st.Flag('+'):
+			for _, pc := range *s {
+				f := Frame(pc)
+				fmt.Fprintf(st, "\n%+v", f)
+			}
+
+		case st.Flag('#'):
 			for _, pc := range *s {
 				f := Frame(pc)
 				fmt.Fprintf(st, "\n%+v", f)
