@@ -5,7 +5,6 @@ import (
 	"runtime"
 	"strings"
 
-	"gitlab.hrs.internal/web-cc/webcc-api/errors/cleanpath"
 )
 
 /*
@@ -14,12 +13,12 @@ By default, it makes the path relative to the $GOPATH environment variable.
 To remove some additional prefix like "github.com" from file paths in
 stacktraces, use something like:
 	stacktrace.CleanPath = func(path string) string {
-		path = cleanpath.RemoveGoPath(path)
+		path = RemoveGoPath(path)
 		path = strings.TrimPrefix(path, "github.com/")
 		return path
 	}
 */
-var CleanPath = cleanpath.RemoveGoPath
+var CleanPath = RemoveGoPath
 
 type ErrorCode uint16
 

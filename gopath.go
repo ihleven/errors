@@ -1,4 +1,4 @@
-package cleanpath
+package errors
 
 import (
 	"os"
