@@ -46,7 +46,7 @@ func (f Frame) name() string {
 	if fn == nil {
 		return "unknown"
 	}
-	return fn.Name()
+	return fmt.Sprintf("%s()", fn.Name())
 }
 
 // Format formats the frame according to the fmt.Formatter interface.
@@ -69,8 +69,6 @@ func (f Frame) Format(s fmt.State, verb rune) {
 			io.WriteString(s, f.name())
 			io.WriteString(s, "\n\t")
 			io.WriteString(s, f.file())
-			// fmt.Fprintf(s, "%s\n   --- at %v:%v ---", f.name(), f.file(), f.line())
-
 		default:
 			io.WriteString(s, path.Base(f.file()))
 		}
@@ -79,9 +77,11 @@ func (f Frame) Format(s fmt.State, verb rune) {
 	case 'n':
 		io.WriteString(s, funcname(f.name()))
 	case 'v':
-		f.Format(s, 's')
-		io.WriteString(s, ":")
-		f.Format(s, 'd')
+		fmt.Fprintf(s, "\tin %-20s at (%s:%d)", f.name(), f.file(), f.line())
+
+		// f.Format(s, 's')
+		// io.WriteString(s, ":")
+		// f.Format(s, 'd')
 	}
 }
 
