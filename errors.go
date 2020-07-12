@@ -20,6 +20,7 @@ func New(format string, args ...interface{}) error {
 	}
 }
 
+// NewWithCode behaves like New. Additionally it attaches the given code to the returned error.
 func NewWithCode(code ErrorCode, format string, args ...interface{}) error {
 
 	return &withStack{
@@ -60,15 +61,15 @@ func (f *fundamental) Format(s fmt.State, verb rune) {
 
 // WithStack annotates err with a stack trace at the point WithStack was called.
 // If err is nil, WithStack returns nil.
-func WithStack(err error) error {
-	if err == nil {
-		return nil
-	}
-	return &withStack{
-		err,
-		callers(),
-	}
-}
+// func WithStack(err error) error {
+// 	if err == nil {
+// 		return nil
+// 	}
+// 	return &withStack{
+// 		err,
+// 		callers(),
+// 	}
+// }
 
 type withStack struct {
 	error
@@ -103,7 +104,8 @@ func (w *withStack) Format(s fmt.State, verb rune) {
 // Wrap returns an error annotating err with a stack trace
 // at the point Wrap is called, and the supplied message.
 // If err is nil, Wrap returns nil.
-func Wrap(err error, format string, args ...interface{}) error {
+func Wrap(err error, args ...interface{}) error {
+
 	if err == nil {
 		return nil
 	}
@@ -119,10 +121,23 @@ func Wrap(err error, format string, args ...interface{}) error {
 		}
 	}
 
+	if len(args) == 0 {
+		return err
+	}
+
 	wrapped := &withMessage{
 		cause: err,
-		msg:   fmt.Sprintf(format, args...),
+		// msg:   fmt.Sprint(args...),
 	}
+
+	switch arg := args[0].(type) {
+	case string:
+		wrapped.msg = fmt.Sprintf(arg, args[1:]...)
+		// default:
+		// 	msg = fmt.Sprint(args...)
+	}
+
+	
 	file, function, line, ok := caller()
 	if ok {
 		// fmt.Printf("wrapping:  %s:%d\n", file, line)
@@ -134,19 +149,19 @@ func Wrap(err error, format string, args ...interface{}) error {
 }
 
 // Wrapf is an alias for Wrap to be compatible with pkg/errors.
-func Wrapf(err error, format string, args ...interface{}) error {
-	return Wrap(err, format, args...)
-}
+// func Wrapf(err error, format string, args ...interface{}) error {
+// 	return Wrap(err, format, args...)
+// }
 
 // WithMessage is an alias for Wrap to be compatible with pkg/errors.
-func WithMessage(err error, format string, args ...interface{}) error {
-	return Wrap(err, format, args...)
-}
+// func WithMessage(err error, format string, args ...interface{}) error {
+// 	return Wrap(err, format, args...)
+// }
 
 // WithMessagef is an alias for Wrap to be compatible with pkg/errors.
-func WithMessagef(err error, format string, args ...interface{}) error {
-	return Wrap(err, format, args...)
-}
+// func WithMessagef(err error, format string, args ...interface{}) error {
+// 	return Wrap(err, format, args...)
+// }
 
 type withMessage struct {
 	cause    error

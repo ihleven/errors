@@ -19,7 +19,7 @@ stacktraces, use something like:
 		return path
 	}
 */
-var CleanPath = RemoveGoPath
+var cleanPath = RemoveGoPath
 
 // func GetCode(err error) (ErrorCode, string) {
 // 	cause := Cause(err)
@@ -74,8 +74,8 @@ func caller() (file string, function string, line int, ok bool) {
 	if !ok {
 		return
 	}
-	if CleanPath != nil {
-		file = CleanPath(file)
+	if cleanPath != nil {
+		file = cleanPath(file)
 	}
 
 	f := runtime.FuncForPC(pc)

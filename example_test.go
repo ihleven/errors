@@ -13,11 +13,11 @@ func wrappedError() error {
 }
 func wrap() error {
 	e := wrap2()
-	return errors.Wrap(e, "Couldn't cause as expected!")
+	return errors.Wrap(e, "Couldn't cause as expected! ")
 }
 func wrap2() error {
 	e := wrap3()
-	return errors.Wrap(e, "")
+	return errors.Wrap(e, "asdf %d %d  ", 5, 6)
 }
 
 func wrap3() error {
@@ -31,7 +31,7 @@ func open() error {
 }
 
 func newerror() error {
-	return errors.New("This is a new error")
+	return errors.New("This is a new error %d", 6)
 }
 
 func Example() {

@@ -13,7 +13,9 @@ import (
 //
 // An error is considered to match a target if it is equal to that target or if
 // it implements a method Is(error) bool such that Is(target) returns true.
-func Is(err, target error) bool { return stderrors.Is(err, target) }
+func Is(err, target error) bool { 
+	return stderrors.Is(err, target) 
+}
 
 // As finds the first error in err's chain that matches target, and if so, sets
 // target to that error value and returns true.
@@ -28,7 +30,9 @@ func Is(err, target error) bool { return stderrors.Is(err, target) }
 //
 // As will panic if target is not a non-nil pointer to either a type that implements
 // error, or to any interface type. As returns false if err is nil.
-func As(err error, target interface{}) bool { return stderrors.As(err, target) }
+func As(err error, target interface{}) bool { 
+	return stderrors.As(err, target) 
+}
 
 // Unwrap returns the result of calling the Unwrap method on err, if err's
 // type contains an Unwrap method returning error.
